@@ -3,7 +3,7 @@ import axios from '~/axios'
 
 // 获取菜单权限列表
 export function getRoleList(page){
-    return axios.get(`/admin/rule/${page}`)
+    return axios.get(`/admin/role/${page}`)
 }
 
 // 增加菜单权限
@@ -13,17 +13,17 @@ export function createRole(data){
 
 // 修改菜单权限
 export function updateRole(id,data){
-    return axios.post("/admin/rule+id,data")
+    return axios.post("/admin/role+id,data")
 }
 
 // 删除菜单权限
 export function deleteRole(id){
-    return axios.post(`/admin/rule/${id}/delete`)
+    return axios.post(`/admin/role/${id}/delete`)
 }
 
 // 修改菜单权限状态
 export function updateRoleStatus(id){
-    return axios.post(`/admin/rule/${id}/update_status`)
+    return axios.post(`/admin/role/${id}/update_status`)
 }
 
 // 设置菜单权限状态
