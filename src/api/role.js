@@ -8,12 +8,12 @@ export function getRoleList(page){
 
 // 增加菜单权限
 export function createRole(data){
-    return axios.post("/admin/rule",data)
+    return axios.post("/admin/role",data)
 }
 
 // 修改菜单权限
 export function updateRole(id,data){
-    return axios.post("/admin/role+id,data")
+    return axios.post("/admin/role/"+id,data)
 }
 
 // 删除菜单权限
@@ -22,8 +22,10 @@ export function deleteRole(id){
 }
 
 // 修改菜单权限状态
-export function updateRoleStatus(id){
-    return axios.post(`/admin/role/${id}/update_status`)
+export function updateRoleStatus(id,status){
+    return axios.post(`/admin/role/${id}/update_status`,{
+        status
+    })
 }
 
 // 设置菜单权限状态
