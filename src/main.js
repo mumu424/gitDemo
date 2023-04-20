@@ -25,4 +25,8 @@ app.mount('#app')
 
 
 import permission from "~/directives/permission.js"
+
+
+// mock数据
+// import "./mock/index.js"
 app.use(permission)

@@ -1,26 +1,24 @@
 <template>
     <el-card>
         <!-- 新增，刷新 -->
-        <!-- <ListHeader @create="handleCreate" @refresh="getData"/> --> 
-        <ListHeader layout="create,refresh" @create="handleCreate" @refresh="getData"/>
+        <!-- <ListHeader @create="handleCreate" @refresh="getData"/> -->
+        <!-- 批量删除，需要先在listHeader里面增加批量删除按钮 --> 
+        <ListHeader layout="create,delete,refresh" @create="handleCreate" @refresh="getData" @delete="handleMultiDelete"/>
         <!-- 表格布局 -->
-        <el-table :data="tableData" @selection-change="handleSelectionChang">
-            <el-table-column label="优惠券名称" width="350">
-                <template #default = "{ row }">
-                    <div class="border border-dashed py-2 px-4 rounded" :class="row.statusText == '领取中' ? 'active' : 'inactive'">
-                        <h5 class="font-bold text-md">{{ row.name }}</h5>
-                        <small>{{ row.start_time }} ~ {{ row.end_time }}</small>
-                    </div>
+        <el-table ref="multipleTableRef" :data="tableData" @selection-change="handleSelectionChang">
+            <el-table-column type="selection" width="55" />
+            <el-table-column prop="name" label="规格名称"></el-table-column>
+            <el-table-column prop="default" label="规格值" width="380"></el-table-column>
+            <el-table-column prop="status" label="状态" width="120">
+                <template #default="{row}">
+                    <el-switch
+                        :modelValue="row.status"
+                        :active-value="1"
+                        :inactive-value="0"
+                        @change="handleStatusChange($event,row)"
+                    ></el-switch>
                 </template>
             </el-table-column>
-            <el-table-column prop="statusText" label="状态"></el-table-column>
-            <el-table-column label="优惠" >
-                <template #default = "{ row }">
-                    {{ row.type == 0 ? '满减' : '折扣' }}  {{ row.type == 0 ?  ("￥" + row.value) : (row.value + "折") }}
-                </template>
-            </el-table-column>
-            <el-table-column prop="total" label="发放数量" ></el-table-column>
-            <el-table-column prop="used" label="已使用" ></el-table-column>
             <el-table-column label="操作" width="180">
                 <template #default="{row}">
                     <el-button text size="small" @click="handleEdit(row)">修改</el-button>
@@ -65,12 +63,11 @@
 import ListHeader from "~/components/ListHeader.vue"
 import { reactive, ref, computed } from "vue"
 import {
-    getCouponList,
-    createCoupon,
-    updateCoupon,
-    deleteCoupon,
-    updateCouponStatus
-} from "~/api/coupon.js"
+    getSkusList,
+    createSkus,
+    updateSkus,
+    deleteSkus
+} from "~/api/skus"
 import FormDrawer from "~/components/FormDrawer.vue"
 import { toast } from "~/composables/util.js"
 
@@ -89,7 +86,7 @@ const form = reactive({
 // 一进入页面，获取数据
 const tableData = ref([])
 function getData(){
-    getCouponList(currentPage.value).then(res => {
+    getSkusList(currentPage.value).then(res => {
         tableData.value = res.list
         console.log(res.list)
     })
